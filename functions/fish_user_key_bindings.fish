@@ -64,23 +64,24 @@ end
 
 
 function go-back --description "Prints the visited directories"
-    if not count $argv > /dev/null
-        set -l alldirs $dirprev $dirnext
-        set -l dirhist
-        for dir in $alldirs[-1..1]
-            if test -d "$dir" -a ! \( $dir = $PWD \)
-                if not contains -- $dir $dirhist
-                    set dirhist $dirhist $dir
-                    echo (count $dirhist):$dir
-                end
-            end
-        end
-    else
+    if count $argv > /dev/null
         set -l string (type -t string ^ /dev/null)
         if test "$string" = builtin
             cd (string replace -r '^\d+:' '' -- $argv[1])
         else
             cd (printf "%s\n" $argv[1] | sed -r 's/^[0-9]+://')
+        end
+        return
+    end
+
+    set -l alldirs $dirprev $dirnext
+    set -l dirhist
+    for dir in $alldirs[-1..1]
+        if test -d "$dir" -a ! \( $dir = $PWD \)
+            if not contains -- $dir $dirhist
+                set dirhist $dirhist $dir
+                echo (count $dirhist):$dir
+            end
         end
     end
 end
@@ -94,10 +95,9 @@ function __fish_go-back
         return
     end
 
-    set -l cmd_line (commandline)
-    if echo "$cmd_line" | grep -q '[^ ]'
-        # in v2.3: if string match -qr '^ *go-back ' "$cmd_line"
-        if echo "$cmd_line" | grep -q '^ *go-back '
+    set -l cmd (commandline -po)
+    if count $cmd > /dev/null
+        if test "$cmd[1]" = "go-back"
             commandline -f execute
             if commandline --paging-mode
                 commandline -f execute

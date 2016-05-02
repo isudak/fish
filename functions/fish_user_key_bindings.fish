@@ -30,12 +30,12 @@ function fish_user_key_bindings
 
     bind \ey 'commandline -r (printf "cd %s/" (dirname $PWD | sed -e "s|^$HOME|~|"))'
     bind \eh '__fish_go-back'
-    bind \e. '__fish_list_current_token'
-    bind \e,  'commandline -f complete down-line'
-
-    bind \e\  execute
+    bind \en  'commandline -f complete down-line'
     bind \em  execute
     bind \eM  "commandline -i \n"
+
+    bind \e. '__fish_list_current_token'
+    bind \e\  execute
 end
 
 

@@ -9,6 +9,9 @@ begin
     end
 end
 
+set -q fish_color_user; or set -U fish_color_user -o green
+set -q fish_color_host; or set -U fish_color_host -o cyan
+
 #if test -r ~/.dir_colors
 #    eval set -x (dircolors ~/.dir_colors | sed 's/=/ /; q')
 #end

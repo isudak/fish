@@ -26,3 +26,8 @@ end
 function du --description 'Estimate file space usage'
     command du -hs $argv
 end
+
+
+function grep --description 'Search for patterns'
+    command grep --color=auto -Hn $argv
+end

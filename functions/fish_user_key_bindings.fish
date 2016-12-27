@@ -13,14 +13,14 @@ function fish_user_key_bindings
     bind \eD backward-kill-line
     bind \eF kill-line
 
-    bind \et '__fish_toggle_word_case'
+    bind \et __fish_toggle_word_case
     bind \er kill-word
     bind \ee backward-kill-word
     bind \ew backward-kill-path-component
 
     bind \ev yank
     bind \eV yank-pop
-    bind \ex '__fish_cancel_or_delete_command'
+    bind \ex __fish_cancel_or_delete_command
     bind \eX kill-whole-line
 
     bind \ei up-or-search
@@ -29,12 +29,12 @@ function fish_user_key_bindings
     bind \eK history-token-search-forward
 
     bind \ey 'commandline -r (printf "cd %s/" (dirname $PWD | sed -e "s|^$HOME|~|"))'
-    bind \eh '__fish_go-back'
-    bind \en  'commandline -f complete down-line'
-    bind \em  execute
-    bind \eM  "commandline -i \n"
+    bind \eh __fish_go-back
+    bind \en 'commandline -f complete down-line'
+    bind \em execute
+    bind \eM "commandline -i \n"
 
-    bind \e. '__fish_list_current_token'
+    bind \e. __fish_list_current_token
     bind \e\  execute
 end
 

@@ -1,22 +1,22 @@
-set fish_greeting
-
-set -x SHELL /usr/bin/fish
-set -x EDITOR /usr/bin/vim
-begin
-    set -l visual (which e ^/dev/null)
-    if test $status -eq 0
-        set -x VISUAL $visual
+function add_to_path --description 'Add path(s) to $PATH'
+    for d in $argv[-1..1]
+        if test -d $d; and not contains -- $d $PATH
+            set PATH $d $PATH
+        end
     end
 end
+
+add_to_path ~/local/bin /opt/local/bin /opt/local/sbin
+
+set -x SHELL  (command -s fish)
+set -x VISUAL (command -s e)
+set -x EDITOR (command -s vim)
+
+set fish_greeting
 
 set -q fish_color_user; or set -U fish_color_user -o green
 set -q fish_color_host; or set -U fish_color_host -o cyan
 
-#if test -r ~/.dir_colors
-#    eval set -x (dircolors ~/.dir_colors | sed 's/=/ /; q')
-#end
+set -q __fish_prompt_hostname; or set -U __fish_prompt_hostname (hostname -s)
 
-begin
-    set -l fish_dir ~/.config/fish
-    source $fish_dir/aliases.fish
-end
+source ~/.config/fish/aliases.fish

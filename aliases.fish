@@ -1,15 +1,28 @@
-function ls --description 'List contents of directory'
-    if isatty 1
-        command ls \
-            --color=always \
-            --indicator-style=classify \
-            --group-directories-first \
-            --time-style=long-iso \
-            -vxh $argv \
-            | less -XR --quit-if-one-screen
-    else
-        command ls $argv
-    end
+switch (uname -s)
+    case Linux
+        if test -r ~/.dir_colors
+            eval (dircolors -c ~/.dir_colors | string replace -r '^setenv ' 'set -gx ')
+        end
+
+        function ls --description 'List contents of directory'
+            if isatty 1
+                command ls \
+                --color=always \
+                --indicator-style=classify \
+                --group-directories-first \
+                --time-style=long-iso \
+                -vxh $argv \
+                | less -XR --quit-if-one-screen
+            else
+                command ls $argv
+            end
+        end
+
+    case Darwin FreeBSD
+        eval (bsd_dircolors ~/.dir_colors)
+        function ls --description 'List contents of directory'
+            command ls -GFh $argv
+        end
 end
 
 

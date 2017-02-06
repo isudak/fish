@@ -18,5 +18,6 @@ set -q fish_color_user; or set -U fish_color_user -o green
 set -q fish_color_host; or set -U fish_color_host -o cyan
 
 set -q __fish_prompt_hostname; or set -U __fish_prompt_hostname (hostname -s)
+set -q __fish_os_name; or set -U __fish_os_name (uname -s)
 
 source ~/.config/fish/aliases.fish

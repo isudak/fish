@@ -1,53 +1,30 @@
-function  __fish_dircolors
-    command dircolors $argv
-end
-
-function __fish_ls
-    command ls $argv
-end
-
-function __load_dir_colors
-    if test -r ~/.dir_colors
-        eval (__fish_dircolors -c ~/.dir_colors | string replace -r '^setenv ' 'set -gx ')
-    end
-end
-
 function ls --description 'List contents of directory'
+    set -l ls
+    switch $__fish_os_name
+        case Darwin FreeBSD DragonFly
+            set ls (command -s gls); or begin
+                command ls -GFh $argv
+                return
+            end
+
+        case '*'
+            set ls (command -s ls); or begin
+                echo "Can't find 'ls' executable" >&2
+                return 1
+            end
+    end
+
+    set -l opts --group-directories-first --time-style=long-iso -vh
+
     if isatty 1
-        __fish_ls \
-        --color=always \
-        --indicator-style=classify \
-        --group-directories-first \
-        --time-style=long-iso \
-        -vxh $argv \
-        | less -XR --quit-if-one-screen
+        eval $ls $opts --color=always --indicator-style=classify -x $argv | less -XR --quit-if-one-screen
     else
-        __fish_ls $argv
+        eval $ls $opts $argv
     end
 end
 
-switch (uname -s)
-    case Darwin FreeBSD
-        if command -s gdircolors > /dev/null; and command -s gls > /dev/null
-            function  __fish_dircolors
-                command gdircolors $argv
-            end
 
-            function __fish_ls
-                command gls $argv
-            end
-        else
-            function __load_dir_colors
-                set -gx LSCOLORS (bsd_dircolors ~/.dir_colors ^ /dev/null)
-            end
-            function ls --description 'List contents of directory'
-                command ls -GFh $argv
-            end
-        end
-end
-
-__load_dir_colors
-functions -e __load_dir_colors
+eval (__fish_dircolors)
 
 
 function la --description "List contents of directory, including hidden files"

@@ -16,7 +16,7 @@ function ls --description 'List contents of directory'
 
     set -l opts --group-directories-first --time-style=long-iso -vh
 
-    if isatty 1
+    if isatty stdout
         eval $ls $opts --color=always --indicator-style=classify -x $argv | less -XR --quit-if-one-screen
     else
         eval $ls $opts $argv
@@ -43,5 +43,10 @@ end
 
 
 function grep --description 'Search for patterns'
-    command grep --color=auto -Hn $argv
+    set -l defaults --extended-regexp --color=auto --line-number
+    if isatty stdin
+        command grep $defaults --with-filename  $argv
+    else
+        command grep $defaults $argv
+    end
 end

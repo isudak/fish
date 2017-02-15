@@ -65,12 +65,7 @@ end
 
 function go-back --description "Prints the visited directories"
     if count $argv > /dev/null
-        set -l string (type -t string ^ /dev/null)
-        if test "$string" = builtin
-            cd (string replace -r '^\d+:' '' -- $argv[1])
-        else
-            cd (printf "%s\n" $argv[1] | sed -r 's/^[0-9]+://')
-        end
+        cd (string replace -r '^\d+:' '' -- $argv[1])
         return
     end
 

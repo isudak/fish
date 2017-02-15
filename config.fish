@@ -6,18 +6,31 @@ function add_to_path --description 'Add path(s) to $PATH'
     end
 end
 
-add_to_path ~/local/bin /opt/local/bin /opt/local/sbin
+set -q __fish_os_name
+    or set -U __fish_os_name (uname -s)
+set -q __fish_prompt_hostname
+    or set -gx __fish_prompt_hostname (hostname -s)
+
+add_to_path ~/local/bin
+
+if test "$__fish_os_name" = Darwin
+    add_to_path /opt/local/bin /opt/local/sbin
+end
 
 set -x SHELL  (command -s fish)
-set -x VISUAL (command -s e)
-set -x EDITOR (command -s vim)
+set -q VISUAL
+    or set -x VISUAL (command -s e)
+set -q EDITOR
+    or set -x EDITOR (command -s vim)
+
+if not status --is-interactive
+    exit
+end
 
 set fish_greeting
-
-set -q fish_color_user; or set -U fish_color_user -o green
-set -q fish_color_host; or set -U fish_color_host -o cyan
-
-set -q __fish_prompt_hostname; or set -U __fish_prompt_hostname (hostname -s)
-set -q __fish_os_name; or set -U __fish_os_name (uname -s)
+set -q fish_color_user
+    or set -U fish_color_user -o green
+set -q fish_color_host
+    or set -U fish_color_host -o cyan
 
 source ~/.config/fish/aliases.fish

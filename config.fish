@@ -11,11 +11,11 @@ set -q __fish_os_name
 set -q __fish_prompt_hostname
     or set -gx __fish_prompt_hostname (hostname -s)
 
-add_to_path ~/local/bin
-
 if test "$__fish_os_name" = Darwin
     add_to_path /opt/local/bin /opt/local/sbin
 end
+
+add_to_path ~/local/bin
 
 set -x SHELL  (command -s fish)
 set -q VISUAL
